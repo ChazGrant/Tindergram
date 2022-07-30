@@ -225,6 +225,11 @@ def messages_handler(messages):
 
 @bot.message_handler(commands=['start'])
 def initialize(message):
+    '''
+        В БД поочерёдно заносятся поля для записи
+        Если пользователь доходит до последнего шага то 
+        все это comit'тится и пользователь появляется в БД
+    '''
     if user_is_initialized(message.from_user.id):
         return
 
