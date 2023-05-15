@@ -18,12 +18,13 @@ current_qu = None
 
 users_pressed_start = list()
 
-# for i in range(7):
-#     age = random.randrange(18, 45)
-#     name = randomname.get_name()
-#     desc = f"Я рандомная анкета №{i}"
-#     photo = open("ph.jpg", "rb")
-#     users["905463602"] = Questionnaire(photo, name, age, desc, "t.me/xavlegbmaofffassssitimi")
+def makeSomeRandomQuestionnaires():
+    for i in range(7):
+        age = random.randrange(18, 45)
+        name = randomname.get_name()
+        desc = f"Я рандомная анкета №{i}"
+        photo = open("ph.jpg", "rb")
+        users["905463602"] = Questionnaire(photo, name, age, desc, "t.me/xavlegbmaofffassssitimi")
 
 questionnaire_keyboard = types.ReplyKeyboardMarkup(row_width=2)
 itembtn1 = types.KeyboardButton('Лайк')
@@ -315,6 +316,7 @@ def get_photo(message):
         bot.register_next_step_handler(message, get_photo)
 
 # Пока не нужно
+"""
 def show_questionnaire_with_many_photos(message):
     qu_photos = tmp_user_info[message.from_user.id][-1]
     user_info = tmp_user_info[message.from_user.id][:-1]
@@ -333,6 +335,7 @@ def show_questionnaire_with_many_photos(message):
     bot.send_media_group(message.chat.id, qu_photos)
     bot.send_message(message.chat.id, "Подтвердить?")
     bot.register_next_step_handler(message, submit_questionnaire)
+"""
 
 def show_questionnaire(message):
     photo = tmp_user_info[message.from_user.id][-1]
@@ -440,6 +443,7 @@ def switch_mutual_like(message, mutual_likes, current_id):
         bot.register_next_step_handler(message, switch_mutual_like, mutual_likes, current_id)
 
 
+# TODO
 def switch_outgoing_like(message, outgoing_likes, current_id):
     if message.text == "Предыдущая" or message.text == "Следующая":
         if message.text == "Предыдущая" and current_id > 0:
