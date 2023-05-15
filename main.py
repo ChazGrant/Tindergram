@@ -5,7 +5,8 @@ import randomname
 from questionnaire import Questionnaire
 from mysql.connector import connect, Error
 
-bot = telebot.TeleBot("5391782983:AAFHwhF00_zk8RWNRGLBLToyE863S-qhUAo")
+TOKEN = open("TOKEN.txt").readline()
+bot = telebot.TeleBot(TOKEN)
 
 tmp_user_info = dict()
 
