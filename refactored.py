@@ -1,33 +1,37 @@
-# import telebot
+import telebot
 from mysql.connector import connect, Error
 # from keyboards import *
 from bot_functions import (bot_functions, show_outcoming_likes, show_incoming_likes, 
     show_main_menu, show_mutual_likes, show_profile, show_questionnaires)
 
-# bot = telebot.TeleBot("5391782983:AAFHwhF00_zk8RWNRGLBLToyE863S-qhUAo")
+from Database import Database
 
+with open("TOKEN.txt") as token_file:
+    TOKEN = token_file.readline()
+bot = telebot.TeleBot(TOKEN)
+db_object = Database()
 # user_id : user_info(e.g id, photo, description)
 tmp_user_info = dict()
 
 current_qu = None
 
-@bot.message_handler(commands=['start'])
+
+@bot.message_handler(commands=["start"])
 def initialize(message):
-    '''
+    """
         В БД поочерёдно заносятся поля для записи
         Если пользователь доходит до последнего шага то 
         все это comit'тится и пользователь появляется в БД
-    '''
-    if user_is_initialized(message.from_user.id):
+    """
+    if db_object.user_is_initialized(message.from_user.id):
         return
-
 
     tmp_user_info[message.from_user.id] = []
     with connect(
         host="localhost",
         user="mezzano",
         password="23561423",
-        database='Tindergram'
+        database="Tindergram"
     ) as connection:
         cursor = connection.cursor()
         user_ID = message.from_user.id
@@ -41,6 +45,7 @@ def initialize(message):
         bot.send_message(message.chat.id, "Для начала давайте создадим анкету.\nКак мне вас называть?")
         bot.register_next_step_handler(message, get_name)
 
+
 while True:
     user_input = input()
     if user_input.lower() == "exit":
@@ -52,4 +57,4 @@ while True:
         print("Unknown command")
 
 # bot.infinity_polling()
-# @bot.message_handler(commands=['start'])
+# @bot.message_handler(commands=["start"])
