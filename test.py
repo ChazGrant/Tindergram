@@ -14,10 +14,15 @@ class Singleton(object):
             cls.instance = super(Singleton, cls).__new__(cls)
         return cls.instance
 
+def modify_dict(d: dict):
+    d["1"] = "1"
 
-s = Singleton(5) ## class initialized, but object not created
-s1 = Singleton(7) ## instance already created
+di  = {}
+modify_dict(di)
+print(di)
+# s = Singleton(5) ## class initialized, but object not created
+# s1 = Singleton(7) ## instance already created
 
-print(s.x)
-print(s1.x)
+# print(s.x)
+# print(s1.x)
 # bot.infinity_polling()

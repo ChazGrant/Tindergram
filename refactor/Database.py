@@ -3,7 +3,9 @@ import random
 import telebot
 from mysql.connector import Error, connect
 
-from additional_functions import format_questionnaire, get_user_link
+from refactor.additional_functions import format_questionnaire, get_user_link
+
+from User import User
 
 
 class Database(object):
@@ -74,7 +76,7 @@ class Database(object):
 
         return profile_info
 
-    def insert_questionnaire(self, message: telebot.types.Message, credentials: list):
+    def insert_questionnaire(self, message: telebot.types.Message, user: User):
         try:
             user_link = get_user_link(message.from_user.username)
             

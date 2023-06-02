@@ -1,17 +1,23 @@
-import telebot
-from mysql.connector import connect, Error
-# from keyboards import *
-from bot_functions import (bot_functions, show_outcoming_likes, show_incoming_likes, 
-    show_main_menu, show_mutual_likes, show_profile, show_questionnaires)
+from typing import DefaultDict
 
-from Database import Database
+import telebot
+from mysql.connector import Error, connect
+
+from refactor.bot_functions import (bot_functions, init_bot, init_db,
+                                    show_incoming_likes, show_main_menu,
+                                    show_mutual_likes, show_outcoming_likes,
+                                    show_profile, show_questionnaires, get_name)
+from refactor.Database import Database
+from User import User
+
 
 with open("TOKEN.txt") as token_file:
     TOKEN = token_file.readline()
 bot = telebot.TeleBot(TOKEN)
-db_object = Database()
+init_bot(TOKEN)
+db_conn = init_db()
 # user_id : user_info(e.g id, photo, description)
-tmp_user_info = dict()
+tmp_user_info = DefaultDict[int, User]
 
 current_qu = None
 
@@ -23,7 +29,7 @@ def initialize(message):
         Если пользователь доходит до последнего шага то 
         все это comit'тится и пользователь появляется в БД
     """
-    if db_object.user_is_initialized(message.from_user.id):
+    if db_conn.user_is_initialized(message.from_user.id):
         return
 
     tmp_user_info[message.from_user.id] = []
@@ -43,7 +49,7 @@ def initialize(message):
         connection.commit()
 
         bot.send_message(message.chat.id, "Для начала давайте создадим анкету.\nКак мне вас называть?")
-        bot.register_next_step_handler(message, get_name)
+        bot.register_next_step_handler(message, tmp_user_info, get_name)
 
 
 while True:
